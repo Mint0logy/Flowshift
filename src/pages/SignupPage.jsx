@@ -1,17 +1,24 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { auth, database } from "../firebase";
+import SignupForm from "../components/SignupForm";
 
 const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const navigate = useNavigate();
 
-  const handleSignUpButton = async () => {
+  const handleSignUp = async (firstName, lastName) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate("/Login");
+      const createdUser = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await setDoc(doc(database, "users", createdUser.user.uid), {
+        firstName: firstName,
+        lastName: lastName,
+      });
     } catch (error) {
       console.log(error.massage);
     }
@@ -19,21 +26,11 @@ const SignupPage = () => {
 
   return (
     <div>
-      <input
-        type="email"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        required
-        placeholder="Email address"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
-        required
-        placeholder="Password"
-      />
-      <button onClick={handleSignUpButton}>Sign-up BRO!</button>
+      <SignupForm
+        setEmail={setEmail}
+        setPassword={setPassword}
+        handleSignUp={handleSignUp}
+      ></SignupForm>
     </div>
   );
 };

@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import LoginForm from "../components/LoginForm";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
-  const handleLoginButton = async () => {
+  const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/Home");
     } catch (error) {
       console.log(error.message);
     }
@@ -19,21 +17,11 @@ const LoginPage = () => {
 
   return (
     <div>
-      <input
-        type="email"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        required
-        placeholder="Email address"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
-        required
-        placeholder="Password"
-      />
-      <button onClick={handleLoginButton}>Sign-up BRO!</button>
+      <LoginForm
+        setEmail={setEmail}
+        setPassword={setPassword}
+        handleLogin={handleLogin}
+      ></LoginForm>
     </div>
   );
 };
