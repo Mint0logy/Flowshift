@@ -1,16 +1,16 @@
 import React from "react";
-import "./TaskStyle.css";
 import { useDrag } from "react-dnd";
+import "./style.css";
 
-const Task = ({ id, name }) => {
+const TaskCard = ({ id, name }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
-    item: { id: id, name: name },
-    collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
+    item: { id: id },
+    collect: (monitor) => ({ isDragging: monitor.isDragging() }),
   }));
   return (
     <div
-      className="task-name"
+      className="task-card"
       style={{ display: isDragging ? "none" : "flex" }}
       ref={drag}
     >
@@ -19,4 +19,4 @@ const Task = ({ id, name }) => {
   );
 };
 
-export default Task;
+export default TaskCard;

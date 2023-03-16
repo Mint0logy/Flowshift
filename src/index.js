@@ -5,16 +5,14 @@ import reportWebVitals from "./reportWebVitals";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import userReducer from "./features/User";
-import todoItemsReducer from "./features/TodoItems";
-import InProgressItemsReducer from "./features/InProgressItems";
-import completeItemsReducer from "./features/CompleteItems";
+import projectsReducer from "./features/Projects";
+import tasksReducer from "./features/Tasks";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
-    todoList: todoItemsReducer,
-    inProgressList: InProgressItemsReducer,
-    completeList: completeItemsReducer,
+    projects: projectsReducer,
+    tasks: tasksReducer,
   },
 });
 
