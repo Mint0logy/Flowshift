@@ -1,40 +1,40 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { database } from "../firebase";
 
-const fetchData1 = async (userId) => {
-  const buildedQuery = query(
-    collection(database, "projects"),
-    where("members", "array-contains", userId)
-  );
-
-  try {
-    const data = await getDocs(buildedQuery);
-    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  } catch (error) {
-    console.log(error);
-    throw error;
+export const fetchProjectsData = createAsyncThunk(
+  "fetchProjectsData",
+  async (userId) => {
+    const dataQuery = query(
+      collection(database, "projects"),
+      where("members", "array-contains", userId)
+    );
+    try {
+      const response = await getDocs(dataQuery);
+      return response.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    } catch (error) {
+      return error;
+    }
   }
-};
+);
 
 export const projectsSlice = createSlice({
   name: "projects",
-  initialState: { value: [] },
-  reducers: {
-    getProjectsFromDatabase: (state, action) => {
-      const buildedQuery = query(
-        collection(database, "projects"),
-        where("members", "array-contains", action.payload)
-      );
-
-      const fetchData = async () => {
-        const data = await getDocs(buildedQuery);
-        state.value = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-      };
-      fetchData();
-    },
+  initialState: { status: "idle", value: [], error: null },
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(fetchProjectsData.pending, (state, action) => {
+      state.status = "loading";
+    });
+    builder.addCase(fetchProjectsData.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.value = action.payload;
+    });
+    builder.addCase(fetchProjectsData.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message;
+    });
   },
 });
 
-export const { getProjectsFromDatabase } = projectsSlice.actions;
 export default projectsSlice.reducer;
