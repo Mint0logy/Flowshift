@@ -8,21 +8,21 @@ const useDropRefs = () => {
   const [, dropOnTodoCard] = useDrop({
     accept: "task",
     drop: (item) => {
-      dispatch(changeTaskStatus({ task: item, newStatus: "todo" }));
+      dispatch(changeTaskStatus({ item, newStatus: "todo" }));
     },
   });
 
   const [, dropOnInProgressCard] = useDrop({
     accept: "task",
     drop: (item) => {
-      dispatch(changeTaskStatus({ task: item, newStatus: "inprogress" }));
+      dispatch(changeTaskStatus({ item, newStatus: "inprogress" }));
     },
   });
 
   const [, dropOnCompleteCard] = useDrop({
     accept: "task",
     drop: (item) => {
-      dispatch(changeTaskStatus({ task: item, newStatus: "complete" }));
+      dispatch(changeTaskStatus({ item, newStatus: "complete" }));
     },
   });
 

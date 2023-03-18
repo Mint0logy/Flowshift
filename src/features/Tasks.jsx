@@ -30,11 +30,17 @@ export const tasksSlice = createSlice({
   initialState: { status: "idle", value: [], error: null },
   reducers: {
     changeTaskStatus: (state, action) => {
-      const { task, newStatus } = action.payload;
-      state = current(state);
-      console.log(state.value[0]);
-      console.log(task.task);
-      console.log(state.value.indexOf(task.task));
+      const { item, newStatus } = action.payload;
+      let stateToModify = { ...current(state) };
+      let taskToModify = stateToModify.value.indexOf(
+        ...stateToModify.value.filter((element) => element.id === item.task.id)
+      );
+      stateToModify.value = [
+        ...stateToModify.value.slice(0, taskToModify),
+        { ...stateToModify.value[taskToModify], status: newStatus },
+        ...stateToModify.value.slice(taskToModify + 1),
+      ];
+      return stateToModify;
     },
   },
   extraReducers(builder) {
