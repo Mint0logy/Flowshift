@@ -14,7 +14,7 @@ const ExpandedTaskCard = ({ isTriggered, task, handlePopupClose }) => {
     temporaryTask.status = status;
     temporaryTask.assigned_user = assignedUser;
     temporaryTask.story_points = storyPoints;
-    temporaryTask.comments.push({ author: "bulshit", content: newComment });
+    temporaryTask.comments.push({ author: "username", content: newComment });
   };
 
   return isTriggered ? (
