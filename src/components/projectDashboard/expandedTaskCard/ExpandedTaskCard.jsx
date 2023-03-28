@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import "./style.css";
+import "../style.css";
+import Comments from "./Comments";
+import Description from "./Description";
+import Status from "./Status";
+import StoryPoints from "./StoryPoints";
 
 const ExpandedTaskCard = ({ isTriggered, task, handlePopupClose }) => {
   const [description, setDescription] = useState(task.description);
@@ -31,41 +35,18 @@ const ExpandedTaskCard = ({ isTriggered, task, handlePopupClose }) => {
         <div className="extended-tasks-card-content-wrapper">
           <div>
             <h1>{task.title}</h1>
-            <textarea
-              defaultValue={task.description}
-              onChange={(event) => setDescription(event.target.value)}
-            ></textarea>
-            <div>
-              <textarea
-                onChange={(event) => setNewComment(event.target.value)}
-              ></textarea>
-              {task.comments.map((comment, i) => (
-                <div key={i}>
-                  <h4>{comment.author}</h4>
-                  <p>{comment.content}</p>
-                </div>
-              ))}
-            </div>
+            <Description
+              setDescription={setDescription}
+              description={task.description}
+            />
+            <Comments setNewComment={setNewComment} comments={task.comments} />
           </div>
           <div>
-            <select
-              defaultValue={task.status}
-              onChange={(event) => setStatus(event.target.value)}
-            >
-              <option value="todo">To do</option>
-              <option value="inprogress">In Progress</option>
-              <option value="complete">Completed</option>
-            </select>
-            <select
-              defaultValue={task.story_points}
-              onChange={(event) => setStoryPoints(event.target.value)}
-            >
-              {[...Array(9)].map((x, i) => (
-                <option key={i} value={i}>
-                  {i}
-                </option>
-              ))}
-            </select>
+            <Status status={task.status} setStatus={setStatus} />
+            <StoryPoints
+              storyPoints={task.story_points}
+              setStoryPoints={setStoryPoints}
+            />
             <h2>{task.assigned_user}</h2>
           </div>
         </div>

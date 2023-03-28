@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDrag } from "react-dnd";
-import ExpandedTaskCard from "./ExpandedTaskCard";
+import ExpandedTaskCard from "./expandedTaskCard/ExpandedTaskCard";
 import "./style.css";
 
 const TaskCard = ({ task }) => {
