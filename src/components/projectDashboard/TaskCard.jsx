@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDrag } from "react-dnd";
-import ExpandedTaskCard from "./expandedTaskCard/ExpandedTaskCard";
+import TaskCardPopup from "./taskCardPopup/TaskCardPopup";
 import "./style.css";
 
 const TaskCard = ({ task }) => {
@@ -25,7 +25,7 @@ const TaskCard = ({ task }) => {
       ref={drag}
     >
       {task.title}
-      <ExpandedTaskCard
+      <TaskCardPopup
         task={task}
         isTriggered={isPopupTriggered}
         handlePopupClose={triggerPopupStateChange}

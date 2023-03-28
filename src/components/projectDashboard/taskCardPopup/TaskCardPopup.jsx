@@ -5,10 +5,10 @@ import Description from "./Description";
 import Status from "./Status";
 import StoryPoints from "./StoryPoints";
 
-const ExpandedTaskCard = ({ isTriggered, task, handlePopupClose }) => {
+const TaskCardPopup = ({ isTriggered, task, handlePopupClose }) => {
   const [description, setDescription] = useState(task.description);
   const [status, setStatus] = useState(task.status);
-  const [assignedUser, setAssignedUser] = useState(task.assigned_user);
+  const [assignedUser] = useState(task.assigned_user);
   const [storyPoints, setStoryPoints] = useState(task.story_points);
   const [newComment, setNewComment] = useState("");
 
@@ -57,4 +57,4 @@ const ExpandedTaskCard = ({ isTriggered, task, handlePopupClose }) => {
   );
 };
 
-export default ExpandedTaskCard;
+export default TaskCardPopup;
