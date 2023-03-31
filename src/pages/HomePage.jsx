@@ -7,7 +7,6 @@ import ProjectDashboard from "../components/projectDashboard/ProjectDashboard";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import ProjectMenu from "../components/projectMenu/ProjectMenu";
-import { useState } from "react";
 
 const HomePage = () => {
   const isAuth = useSelector((state) => state.user.value);
@@ -19,7 +18,7 @@ const HomePage = () => {
     projects.status === "idle" &&
       dispatch(fetchProjectsData(auth.currentUser.uid));
     projects.status === "succeeded" &&
-      dispatch(fetchTasksData(projects.value[1].tasks));
+      dispatch(fetchTasksData(projects.value[0].tasks));
   }, [dispatch, projects]);
 
   if (!isAuth) {

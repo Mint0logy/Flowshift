@@ -19,15 +19,19 @@ export const fetchProjectsData = createAsyncThunk(
 );
 
 export const addNewProject = async (project) => {
-  await addDoc(collection(database, "projects"), project);
+  const addedProject = await addDoc(collection(database, "projects"), project);
+  return addedProject.id;
 };
 
 export const projectsSlice = createSlice({
   name: "projects",
-  initialState: { status: "idle", value: [], error: null },
+  initialState: { status: "idle", value: [], error: null, selectedProject: "" },
   reducers: {
     addNewProjectLocally: (state, action) => {
       state.value.push(action.payload);
+    },
+    setSelectedProject: (state, action) => {
+      state.selectedProject = action.payload;
     },
   },
   extraReducers(builder) {
@@ -44,5 +48,6 @@ export const projectsSlice = createSlice({
     });
   },
 });
-export const { addNewProjectLocally } = projectsSlice.actions;
+export const { addNewProjectLocally, setSelectedProject } =
+  projectsSlice.actions;
 export default projectsSlice.reducer;

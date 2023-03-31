@@ -13,7 +13,7 @@ const ProjectMenu = () => {
   return (
     <div>
       {projects.value.map((project) => (
-        <p>{project.name}</p>
+        <p key={project.id}>{project.name}</p>
       ))}
       <CreateProjectPopup
         isTriggered={isCreateProjectPopupTriggered}

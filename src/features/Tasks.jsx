@@ -5,6 +5,7 @@ import {
   documentId,
   query,
   where,
+  addDoc,
 } from "firebase/firestore";
 import { database } from "../firebase";
 
@@ -25,6 +26,11 @@ export const fetchTasksData = createAsyncThunk(
   }
 );
 
+export const addNewTask = async (task) => {
+  const addedTask = await addDoc(collection(database, "tasks"), task);
+  return addedTask.id;
+};
+
 export const tasksSlice = createSlice({
   name: "tasks",
   initialState: { status: "idle", value: [], error: null },
@@ -42,6 +48,9 @@ export const tasksSlice = createSlice({
       ];
       return stateToModify;
     },
+    addNewTaskLocally: (state, action) => {
+      state.value.push(action.payload);
+    },
   },
   extraReducers(builder) {
     builder.addCase(fetchTasksData.pending, (state, action) => {
@@ -58,5 +67,5 @@ export const tasksSlice = createSlice({
   },
 });
 
-export const { changeTaskStatus } = tasksSlice.actions;
+export const { changeTaskStatus, addNewTaskLocally } = tasksSlice.actions;
 export default tasksSlice.reducer;

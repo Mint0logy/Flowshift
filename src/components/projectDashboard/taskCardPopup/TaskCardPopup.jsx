@@ -1,25 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import "../style.css";
 import Comments from "./Comments";
 import Description from "./Description";
 import Status from "./Status";
 import StoryPoints from "./StoryPoints";
+import Title from "./Title";
+import useLocalTask from "./useLocalTask";
 
 const TaskCardPopup = ({ isTriggered, task, handlePopupClose }) => {
-  const [description, setDescription] = useState(task.description);
-  const [status, setStatus] = useState(task.status);
-  const [assignedUser] = useState(task.assigned_user);
-  const [storyPoints, setStoryPoints] = useState(task.story_points);
-  const [newComment, setNewComment] = useState("");
+  const {
+    setLocalTitle,
+    setLocalDescription,
+    setLocalStatus,
+    setLocalAssignedUser,
+    setLocalStoryPoints,
+    setLocalComments,
+    addNewComment,
+    localTask,
+  } = useLocalTask();
 
-  const onSaveButton = () => {
-    let temporaryTask = { ...task };
-    temporaryTask.description = description;
-    temporaryTask.status = status;
-    temporaryTask.assigned_user = assignedUser;
-    temporaryTask.story_points = storyPoints;
-    temporaryTask.comments.push({ author: "username", content: newComment });
-  };
+  useEffect(() => {
+    if (task !== null) {
+      setLocalTitle(task.title);
+      setLocalDescription(task.description);
+      setLocalStatus(task.status);
+      setLocalAssignedUser(task.assigneduser);
+      setLocalStoryPoints(task.storypoints);
+      setLocalComments(task.comments);
+    }
+  });
 
   return isTriggered ? (
     <div
@@ -31,23 +40,26 @@ const TaskCardPopup = ({ isTriggered, task, handlePopupClose }) => {
         <button className="close-button" onClick={() => handlePopupClose()}>
           X
         </button>
-        <button onClick={onSaveButton}>Save</button>
+        <button>Save</button>
         <div className="extended-tasks-card-content-wrapper">
+          <Title title={localTask.title} setTitle={setLocalTitle} />
           <div>
-            <h1>{task.title}</h1>
             <Description
-              setDescription={setDescription}
-              description={task.description}
+              setDescription={setLocalDescription}
+              description={localTask.description}
             />
-            <Comments setNewComment={setNewComment} comments={task.comments} />
+            <Comments
+              setNewComment={addNewComment}
+              comments={localTask.comments}
+            />
           </div>
           <div>
-            <Status status={task.status} setStatus={setStatus} />
+            <Status status={localTask.status} setStatus={setLocalStatus} />
             <StoryPoints
-              storyPoints={task.story_points}
-              setStoryPoints={setStoryPoints}
+              storyPoints={localTask.storypoints}
+              setStoryPoints={setLocalStoryPoints}
             />
-            <h2>{task.assigned_user}</h2>
+            <h2>{localTask.assigneduser}</h2>
           </div>
         </div>
       </div>

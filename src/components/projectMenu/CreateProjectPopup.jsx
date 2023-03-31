@@ -1,7 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addNewProject, addNewProjectLocally } from "../../features/Projects";
+import {
+  addNewProject,
+  addNewProjectLocally,
+  setSelectedProject,
+} from "../../features/Projects";
 import { auth } from "../../firebase";
 
 const CreateProjectPopup = ({ isTriggered, handlePopupClose }) => {
@@ -14,8 +18,11 @@ const CreateProjectPopup = ({ isTriggered, handlePopupClose }) => {
       members: [auth.currentUser.uid],
       tasks: [],
     };
-    addNewProject(createdProject);
-    dispatch(addNewProjectLocally(createdProject));
+    addNewProject(createdProject).then((id) => {
+      dispatch(addNewProjectLocally({ ...createdProject, id }));
+      dispatch(setSelectedProject(id));
+    });
+
     handlePopupClose();
   };
 
