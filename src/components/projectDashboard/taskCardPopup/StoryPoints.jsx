@@ -1,6 +1,6 @@
 import React from "react";
 
-const StoryPoints = (storyPoints, setStoryPoints) => {
+const StoryPoints = ({ storyPoints, setStoryPoints }) => {
   return (
     <select
       defaultValue={storyPoints}

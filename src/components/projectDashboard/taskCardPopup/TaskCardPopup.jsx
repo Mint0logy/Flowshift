@@ -8,7 +8,8 @@ import Title from "./Title";
 import useLocalTask from "./useLocalTask";
 
 const TaskCardPopup = ({ isTriggered, task, handlePopupClose }) => {
-  const {
+  let {
+    setLocalId,
     setLocalTitle,
     setLocalDescription,
     setLocalStatus,
@@ -16,19 +17,23 @@ const TaskCardPopup = ({ isTriggered, task, handlePopupClose }) => {
     setLocalStoryPoints,
     setLocalComments,
     addNewComment,
+    onSave,
+    getCurrentLocalTask,
     localTask,
   } = useLocalTask();
 
   useEffect(() => {
     if (task !== null) {
+      setLocalId(task.id);
       setLocalTitle(task.title);
       setLocalDescription(task.description);
       setLocalStatus(task.status);
       setLocalAssignedUser(task.assigneduser);
       setLocalStoryPoints(task.storypoints);
       setLocalComments(task.comments);
+      localTask = getCurrentLocalTask();
     }
-  });
+  }, []);
 
   return isTriggered ? (
     <div
@@ -40,7 +45,7 @@ const TaskCardPopup = ({ isTriggered, task, handlePopupClose }) => {
         <button className="close-button" onClick={() => handlePopupClose()}>
           X
         </button>
-        <button>Save</button>
+        <button onClick={() => onSave(true)}>Save</button>
         <div className="extended-tasks-card-content-wrapper">
           <Title title={localTask.title} setTitle={setLocalTitle} />
           <div>

@@ -1,14 +1,17 @@
 import { useState } from "react";
-import { addNewTaskLocally } from "../../../features/Tasks";
+import { addNewTaskLocally, addNewTask } from "../../../features/Tasks";
+import { useSelector, useDispatch } from "react-redux";
+import { updateTasksInProject } from "../../../features/Projects";
 
 const useLocalTask = () => {
+  const projects = useSelector((state) => state.projects);
+  const dispatch = useDispatch();
   const defaultTaskStructure = {
-    id: "",
     title: "",
     description: "",
     status: "todo",
-    assignedUser: "user",
-    storyPoints: 1,
+    assigneduser: "user",
+    storypoints: 1,
     comments: [],
   };
 
@@ -26,11 +29,11 @@ const useLocalTask = () => {
   const setLocalStatus = (status) => {
     setLocalTask({ ...localTask, status });
   };
-  const setLocalAssignedUser = (assignedUser) => {
-    setLocalTask({ ...localTask, assignedUser });
+  const setLocalAssignedUser = (assigneduser) => {
+    setLocalTask({ ...localTask, assigneduser });
   };
-  const setLocalStoryPoints = (storyPoints) => {
-    setLocalTask({ ...localTask, storyPoints });
+  const setLocalStoryPoints = (storypoints) => {
+    setLocalTask({ ...localTask, storypoints });
   };
   const setLocalComments = (comments) => {
     setLocalTask({ ...localTask, comments });
@@ -42,14 +45,30 @@ const useLocalTask = () => {
     });
   };
 
+  const getCurrentLocalTask = () => {
+    console.log("robię to: ", localTask);
+    return localTask;
+  };
+
   const addNewTaskToDatabase = () => {
-    addNewTaskLocally(localTask);
+    addNewTask(localTask).then((id) => {
+      setLocalId(id);
+      dispatch(addNewTaskLocally(localTask));
+      let projectTasksArray = projects.value.filter(
+        (project) => project.id === projects.selectedProject
+      )[0].tasks;
+      updateTasksInProject(projects.selectedProject, [
+        ...projectTasksArray,
+        id,
+      ]);
+      setLocalTask(defaultTaskStructure);
+    });
   };
 
   const modifyExistingTask = () => {};
 
   const onSave = (isNew) => {
-    return isNew ? addNewTaskToDatabase : modifyExistingTask;
+    isNew ? addNewTaskToDatabase() : modifyExistingTask();
   };
 
   return {
@@ -62,6 +81,7 @@ const useLocalTask = () => {
     setLocalComments,
     addNewComment,
     onSave,
+    getCurrentLocalTask,
     localTask,
   };
 };

@@ -1,5 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { collection, getDocs, query, where, addDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
 import { database } from "../firebase";
 
 export const fetchProjectsData = createAsyncThunk(
@@ -23,9 +31,18 @@ export const addNewProject = async (project) => {
   return addedProject.id;
 };
 
+export const updateTasksInProject = async (id, newTasksList) => {
+  await updateDoc(doc(database, "projects", id), { tasks: newTasksList });
+};
+
 export const projectsSlice = createSlice({
   name: "projects",
-  initialState: { status: "idle", value: [], error: null, selectedProject: "" },
+  initialState: {
+    status: "idle",
+    value: [],
+    error: null,
+    selectedProject: "oXC7Fe4PIP1tk42Kld0f",
+  },
   reducers: {
     addNewProjectLocally: (state, action) => {
       state.value.push(action.payload);
