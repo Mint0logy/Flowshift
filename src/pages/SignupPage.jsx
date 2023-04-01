@@ -1,43 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
 import { auth, database } from "../firebase";
-import SignupForm from "../components/SignupForm";
-import { changeAuth } from "../features/User";
+import { setDoc, doc } from "firebase/firestore";
 import { useDispatch } from "react-redux";
+import { setUserState } from "../features/User";
 import { useNavigate } from "react-router-dom";
+import SignupForm from "../components/SignupForm/SignupForm";
+import styles from "./SignupPage.module.css";
 
 const SignupPage = () => {
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSignUp = async (firstName, lastName) => {
-    try {
-      const createdUser = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await setDoc(doc(database, "users", createdUser.user.uid), {
-        firstName: firstName,
-        lastName: lastName,
-      });
-      dispatch(changeAuth());
-      navigate("/Home");
-    } catch (error) {
-      console.log(error.massage);
-    }
+  const addUserToAuthentication = async (email, password) => {
+    const createdUser = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return createdUser.user.uid;
+  };
+
+  const handleSignup = async (firstName, lastName, email, password) => {
+    addUserToAuthentication(email, password).then((userId) => {
+      setDoc(doc(database, "users", userId), { firstName, lastName });
+      dispatch(setUserState(userId));
+      navigate("/Dashboard");
+    });
   };
 
   return (
-    <div>
-      <SignupForm
-        setEmail={setEmail}
-        setPassword={setPassword}
-        handleSignUp={handleSignUp}
-      ></SignupForm>
+    <div className={styles.container}>
+      <SignupForm handleSignup={handleSignup} />
     </div>
   );
 };

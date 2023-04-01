@@ -1,0 +1,30 @@
+.popupWrapper{
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.popup{
+    background-color: beige;
+    max-width: 50%;
+    min-height: 30%;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.top{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.top{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}

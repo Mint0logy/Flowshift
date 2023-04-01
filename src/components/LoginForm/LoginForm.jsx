@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import styles from "./LoginForm.module.css";
 
-const LoginForm = ({ setEmail, setPassword, handleLogin }) => {
+const LoginForm = ({ handleLogin }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
-    <>
+    <div>
       <input
         type="email"
         onChange={(event) => setEmail(event.target.value)}
@@ -15,8 +18,8 @@ const LoginForm = ({ setEmail, setPassword, handleLogin }) => {
         required
         placeholder="Password"
       />
-      <button onClick={handleLogin}>Login</button>
-    </>
+      <button onClick={() => handleLogin(email, password)}>Login</button>
+    </div>
   );
 };
 
